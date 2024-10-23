@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void swap(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+void insertionSort(vector<int>& arr, int low, int high) {
+    for (int i = low + 1; i <= high; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        while (j >= low && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void quickSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pivot = partition(arr, low, high);
+
+        //Use insertion sort for smaller sublists
+        if (high - low + 1 <= 10) {
+            insertionSort(arr, low, high);
+        } else {
+            quickSort(arr, low, pivot - 1);
+            quickSort(arr, pivot + 1, high);
+        }
+    }
+}
+
+int main() {
+    vector<int> arr = {94, 78, 25, 46, 83, 33, 48, 17, 29, 88, 56, 5,
+    96, 21, 65, 57, 96, 87, 73, 50, 8, 15, 58, 9, 67, 84, 52, 44, 15, 7,
+    9, 62, 85, 35, 8, 68, 20, 8, 86, 1, 97, 42, 7, 45, 64, 72, 2, 12, 11, 27,
+    15, 20, 42, 73, 81, 61, 9, 33, 57, 24, 40, 66, 86, 26, 53, 46, 94, 25, 55,
+    32, 27, 52, 27, 34, 97, 43, 6, 51, 55, 17, 30, 22, 89, 24, 95, 22, 37, 4, 55,
+    94, 81, 48, 60, 67, 26, 66, 66, 20, 91, 21};
+
+    quickSort(arr, 0, arr.size() - 1);
+
+    cout << "Sorted array: ";
+    for (int num : arr) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
